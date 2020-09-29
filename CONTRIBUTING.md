@@ -1,0 +1,1 @@
+# Faq and forum module for etudiant.bj: how to contribute
