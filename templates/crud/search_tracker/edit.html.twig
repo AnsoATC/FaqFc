@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit SearchTracker{% endblock %}
+
+{% block body %}
+    <h1>Edit SearchTracker</h1>
+
+    {{ include('search_tracker/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('search_tracker_index') }}">back to list</a>
+
+    {{ include('search_tracker/_delete_form.html.twig') }}
+{% endblock %}
