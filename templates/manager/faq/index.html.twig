@@ -1,0 +1,43 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Faq index
+{% endblock %}
+
+{% block body %}
+
+	<h1>Create new Faq</h1>
+
+	{{ include('manager/faq/_form.html.twig') }}
+
+
+	<h1>Faq index</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Question</th>
+				<th>Response</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for faq in faqs %}
+				<tr>
+					<td>{{ faq.id }}</td>
+					<td>{{ faq.question }}</td>
+					<td>{{ faq.response }}</td>
+					<td>
+						<a href="{{ path('faq_edit', {'id': faq.id}) }}">edit</a>
+                       {{ include('manager/faq/_form.html.twig') }}
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}

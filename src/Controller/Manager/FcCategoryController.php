@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Manager;
 
 use App\Entity\FcCategory;
 use App\Form\FcCategoryType;
@@ -11,51 +11,35 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/fc/category")
+ * @Route("/manage/fccategory")
  */
 class FcCategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="fc_category_index", methods={"GET"})
+     * @Route("/", name="fc_category_index", methods={"GET","POST"})
      */
-    public function index(FcCategoryRepository $fcCategoryRepository): Response
+    public function index(FcCategoryRepository $fcCategoryRepository, Request $request): Response
     {
-        return $this->render('fc_category/index.html.twig', [
-            'fc_categories' => $fcCategoryRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="fc_category_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
+        //Handle new fc category creation
         $fcCategory = new FcCategory();
         $form = $this->createForm(FcCategoryType::class, $fcCategory);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $fcCategory->setCreatedAt(new \DateTime());
+            $fcCategory->setAuthor($this->getUser());
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($fcCategory);
             $entityManager->flush();
-
-            return $this->redirectToRoute('fc_category_index');
         }
 
-        return $this->render('fc_category/new.html.twig', [
+        return $this->render('manager/fc_category/index.html.twig', [
             'fc_category' => $fcCategory,
             'form' => $form->createView(),
+            'fc_categories' => $fcCategoryRepository->findAll()
         ]);
-    }
 
-    /**
-     * @Route("/{id}", name="fc_category_show", methods={"GET"})
-     */
-    public function show(FcCategory $fcCategory): Response
-    {
-        return $this->render('fc_category/show.html.twig', [
-            'fc_category' => $fcCategory,
-        ]);
     }
 
     /**
@@ -72,7 +56,7 @@ class FcCategoryController extends AbstractController
             return $this->redirectToRoute('fc_category_index');
         }
 
-        return $this->render('fc_category/edit.html.twig', [
+        return $this->render('manager/fc_category/edit.html.twig', [
             'fc_category' => $fcCategory,
             'form' => $form->createView(),
         ]);

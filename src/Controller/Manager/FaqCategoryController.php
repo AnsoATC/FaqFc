@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Manager;
 
 use App\Entity\FaqCategory;
 use App\Form\FaqCategoryType;
@@ -11,25 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/faq/category")
+ * @Route("/manage/faqcategory")
  */
 class FaqCategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="faq_category_index", methods={"GET"})
+     * @Route("/", name="faq_category_index", methods={"GET","POST"})
      */
-    public function index(FaqCategoryRepository $faqCategoryRepository): Response
+    public function index(FaqCategoryRepository $faqCategoryRepository, Request $request): Response
     {
-        return $this->render('faq_category/index.html.twig', [
-            'faq_categories' => $faqCategoryRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="faq_category_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
+        //Handle new faq category creation
         $faqCategory = new FaqCategory();
         $form = $this->createForm(FaqCategoryType::class, $faqCategory);
         $form->handleRequest($request);
@@ -38,25 +29,16 @@ class FaqCategoryController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($faqCategory);
             $entityManager->flush();
-
-            return $this->redirectToRoute('faq_category_index');
+            //return $this->redirectToRoute('faq_category_index');
         }
 
-        return $this->render('faq_category/new.html.twig', [
+        return $this->render('manager/faq_category/index.html.twig', [
             'faq_category' => $faqCategory,
             'form' => $form->createView(),
+            'faq_categories' => $faqCategoryRepository->findAll(),
         ]);
     }
-
-    /**
-     * @Route("/{id}", name="faq_category_show", methods={"GET"})
-     */
-    public function show(FaqCategory $faqCategory): Response
-    {
-        return $this->render('faq_category/show.html.twig', [
-            'faq_category' => $faqCategory,
-        ]);
-    }
+   
 
     /**
      * @Route("/{id}/edit", name="faq_category_edit", methods={"GET","POST"})
@@ -72,7 +54,7 @@ class FaqCategoryController extends AbstractController
             return $this->redirectToRoute('faq_category_index');
         }
 
-        return $this->render('faq_category/edit.html.twig', [
+        return $this->render('manager/faq_category/edit.html.twig', [
             'faq_category' => $faqCategory,
             'form' => $form->createView(),
         ]);

@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\Message;
 use App\Form\MessageType;
+use App\Repository\FcCategoryRepository;
 use App\Repository\MessageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,15 +11,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/message")
+ * @Route("/forum")
  */
 class MessageController extends AbstractController
 {
     /**
      * @Route("/", name="message_index", methods={"GET"})
      */
-    public function index(MessageRepository $messageRepository): Response
+    public function index(MessageRepository $messageRepository, FcCategoryRepository $fcCategoryRepository): Response
     {
+        //Get last 5 message of each category
+        //
         return $this->render('message/index.html.twig', [
             'messages' => $messageRepository->findAll(),
         ]);

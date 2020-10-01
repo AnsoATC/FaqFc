@@ -1,4 +1,6 @@
-{% extends 'base.html.twig' %}
+
+{% extends 'layouts/base.html.twig' %}
+
 
 {% block title %}SearchTracker index{% endblock %}
 
@@ -13,7 +15,6 @@
                 <th>FaqFoundResult</th>
                 <th>FcFoundResult</th>
                 <th>SearchedAt</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
@@ -24,10 +25,6 @@
                 <td>{{ search_tracker.faqFoundResult }}</td>
                 <td>{{ search_tracker.fcFoundResult }}</td>
                 <td>{{ search_tracker.searchedAt ? search_tracker.searchedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('search_tracker_show', {'id': search_tracker.id}) }}">show</a>
-                    <a href="{{ path('search_tracker_edit', {'id': search_tracker.id}) }}">edit</a>
-                </td>
             </tr>
         {% else %}
             <tr>
@@ -37,5 +34,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('search_tracker_new') }}">Create new</a>
 {% endblock %}

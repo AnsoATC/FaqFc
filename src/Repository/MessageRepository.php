@@ -47,4 +47,17 @@ class MessageRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function search($question): ?array
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.content  LIKE :content')
+            ->setParameter('content', '%' . $question . '%')
+            ->orWhere('m.title  LIKE :title')
+            ->setParameter('title', '%' . $question . '%')
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+    }
 }

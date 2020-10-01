@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block title %}Faq index
+{% endblock %}
+
+{% block body %}
+	<h1>{{ faqCategory.name }}</h1>
+	<p>{{ faqCategory.name }}</p>
+
+	<div class="row">
+	{% for faq in faqs %}
+		<div class="col-md-4">
+			<h3>Question:
+				{{ faq.question }}</h3>
+			<p>Réponse:
+				{{ faq.response }}</p>
+		</div>
+	{% else %}
+		<div>
+			<h3>Oups...</h3>
+			<p>Aucune question réponse n'est encore enregistrée par ici</p>
+		</div>
+	{% endfor %}
+	</div>
+{% endblock %}

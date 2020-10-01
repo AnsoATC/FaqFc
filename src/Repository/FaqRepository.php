@@ -47,4 +47,17 @@ class FaqRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function search($question): ?array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.question  LIKE :question')
+            ->setParameter('question', '%' . $question . '%')
+            ->orWhere('f.response  LIKE :response')
+            ->setParameter('response', '%' . $question . '%')
+            ->orderBy('f.id', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+    }
 }

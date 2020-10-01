@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Faq;
+use App\Entity\FaqCategory;
 use App\Form\FaqType;
 use App\Repository\FaqRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,24 +17,31 @@ use Symfony\Component\Routing\Annotation\Route;
 class FaqController extends AbstractController
 {
     /**
-     * @Route("/", name="faq_index", methods={"GET"})
+     * @Route("/category/{id}", name="faq_of_category", methods={"GET"})
      */
-    public function index(FaqRepository $faqRepository): Response
+    public function faqOfCategory(FaqCategory $faqCategory, FaqRepository $faqRepository): Response
     {
-        return $this->render('faq/index.html.twig', [
-            'faqs' => $faqRepository->findAll(),
+        if (!$faqCategory) {
+            throw $this->createNotFoundException(
+                'Aucune catégorie de faq retrouvé avec cet id:  ' . $faqCategory->getId()
+            );
+        }
+
+        return $this->render('faq/faqs_of_category.html.twig', [
+            'faqs' => $faqRepository->findBy(['category' => $faqCategory]),
+            'faqCategory' => $faqCategory
         ]);
     }
 
     /**
-     * @Route("/new", name="faq_new", methods={"GET","POST"})
+     * @Route("/", name="faq_index", methods={"GET","POST", "DELETE"})
      */
-    public function new(Request $request): Response
+    public function index(FaqRepository $faqRepository, Request $request): Response
     {
+        //Handle new Faq creation
         $faq = new Faq();
         $form = $this->createForm(FaqType::class, $faq);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($faq);
@@ -42,27 +50,27 @@ class FaqController extends AbstractController
             return $this->redirectToRoute('faq_index');
         }
 
-        return $this->render('faq/new.html.twig', [
+        return $this->render('manager/faq/index.html.twig', [
             'faq' => $faq,
             'form' => $form->createView(),
+            'faqs' => $faqRepository->findAll(),
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="faq_show", methods={"GET"})
-     */
-    public function show(Faq $faq): Response
-    {
-        return $this->render('faq/show.html.twig', [
-            'faq' => $faq,
-        ]);
-    }
+    
 
     /**
      * @Route("/{id}/edit", name="faq_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Faq $faq): Response
     {
+
+        if (!$faq) {
+            throw $this->createNotFoundException(
+                'Aucune faq retrouvé avec cet id:  ' . $faq->getId()
+            );
+        }
+
         $form = $this->createForm(FaqType::class, $faq);
         $form->handleRequest($request);
 
@@ -72,7 +80,7 @@ class FaqController extends AbstractController
             return $this->redirectToRoute('faq_index');
         }
 
-        return $this->render('faq/edit.html.twig', [
+        return $this->render('crud/faq/edit.html.twig', [
             'faq' => $faq,
             'form' => $form->createView(),
         ]);
@@ -83,7 +91,7 @@ class FaqController extends AbstractController
      */
     public function delete(Request $request, Faq $faq): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$faq->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $faq->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($faq);
             $entityManager->flush();
