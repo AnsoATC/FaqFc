@@ -13,6 +13,10 @@ It's very easy to contribute to this project
     ---
         cd FaqFC
         git remote add upstream https://github.com/Geek-Unstim/FaqFc.git
+        //Install dependencies and run migrations
+        composer install 
+        php bin/bin doctrine:migrations:diff
+        php bin/bin doctrine:migrations:migrate
 
     ---
 3. Branch for each separate piece of work.
