@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -60,6 +62,26 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $lastName;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Message::class, mappedBy="author")
+     */
+    private $messages;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isConnected;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastConnectedAt;
+
+    public function __construct()
+    {
+        $this->messages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -195,6 +217,58 @@ class User implements UserInterface
     public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->addAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->contains($message)) {
+            $this->messages->removeElement($message);
+            $message->removeAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function getIsConnected(): ?bool
+    {
+        return $this->isConnected;
+    }
+
+    public function setIsConnected(?bool $isConnected): self
+    {
+        $this->isConnected = $isConnected;
+
+        return $this;
+    }
+
+    public function getLastConnectedAt(): ?\DateTimeInterface
+    {
+        return $this->lastConnectedAt;
+    }
+
+    public function setLastConnectedAt(?\DateTimeInterface $lastConnectedAt): self
+    {
+        $this->lastConnectedAt = $lastConnectedAt;
 
         return $this;
     }

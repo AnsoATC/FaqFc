@@ -47,4 +47,19 @@ class MessageTreeviewRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    //The return [] contains message with no replies
+    public function findUnrepliedMessages(): ?array
+    {
+        return $this->createQueryBuilder('m')
+            ->select('m.answers')
+            ->andWhere('m.answers  =:answersnull')
+            ->setParameter('answersnull', null)
+            ->orWhere('m.answers  =:answersempty')
+            ->setParameter('answersempty', [])
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+    }
 }

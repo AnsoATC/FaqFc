@@ -1,25 +1,51 @@
-{% extends 'layouts/base.html.twig' %}
+{% extends 'layouts/faq_base.html.twig' %}
 
 {% block title %}Faq index
 {% endblock %}
+{% block content %}
+	<p class="text-center">Cette page contient toutes les réponses à quelques questions relevées comme fréquemment posées par rapport à {{ faqCategory.name }}.</p>
+		<div class="container">
+			<div style="padding-bottom: 50px;">
+				<h4 class="text-left" id="categorie3">{{ faqCategory.name }}</h4>
+				<hr>
+				<div class="col-md-10 mx-auto">
+					<div class="tab-content panels-faq">
+						<div class="tab-pane active" id="tab1">
+							<div class="panel-group" id="help-accordion-1">
 
-{% block body %}
-	<h1>{{ faqCategory.name }}</h1>
-	<p>{{ faqCategory.name }}</p>
+								<p class="text-left">
+									{{ faqCategory.description }}
+								</p>
 
-	<div class="row">
-	{% for faq in faqs %}
-		<div class="col-md-4">
-			<h3>Question:
-				{{ faq.question }}</h3>
-			<p>Réponse:
-				{{ faq.response }}</p>
+								{% for faq in faqs %}
+									<div class="panel panel-default panel-help">
+										<a href="#{{ "open_" ~ faq.id }}" data-toggle="collapse" data-parent="#help-accordion-1">
+											<div class="panel-heading card border-warning">
+												<h2>
+													<span class="glyphicon glyphicon-question-sign"></span>
+													{{ faq.question }}</h2>
+											</div>
+										</a>
+										<div id="{{ "open_" ~ faq.id }}" class="collapse in">
+											<div class="panel-body">
+												<p>{{ faq.response }}</p>
+											</div>
+										</div>
+									</div>
+								{% else %}
+									<div>
+										<h3>Oups...</h3>
+										<p>Aucune question réponse n'est encore enregistrée par ici</p>
+									</div>
+								{% endfor %}
+
+
+								<p>Votre question ne se trouve pas dans la liste qui vous ai proposer? 
+									<a href="{{ path('forum_index') }}">poster une question dans le forum</a></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-	{% else %}
-		<div>
-			<h3>Oups...</h3>
-			<p>Aucune question réponse n'est encore enregistrée par ici</p>
-		</div>
-	{% endfor %}
-	</div>
 {% endblock %}

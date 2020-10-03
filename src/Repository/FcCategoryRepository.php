@@ -47,4 +47,24 @@ class FcCategoryRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findCountTotal()
+    {
+        return $this->createQueryBuilder('f')
+            ->select('count(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+  /**
+     * Find the item nearestPlace list
+     */
+    public function findAllCategories(): ?array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\FcCategory;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Repository\MessageRepository;
+use App\Service\ForumHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,24 +17,14 @@ class ForumController extends AbstractController
 {
     /**
      * Categorgy list with last messages and basic stats data
-     * @Route("/forum", name="forum")
+     * @Route("/", name="forum_index")
      */
-    public function index()
+    public function index(ForumHelper $forumHelper)
     {
-        //TODO: Fetch all category
-
-
-        //For each category get it 5 last message with basics stat( viewed, reply)
-
-
-        //Enable search in forum
-
-
-        //Get global stat from the forum:  nb of category, nb of message, nb of participants
-
-        //Tool bar with: create a mes message, dernier message non lu, messages sans reponse, 
+        //Twig: Tool bar with: dernier message non lu for the logged user, messages sans reponse, 
         return $this->render('forum/index.html.twig', [
-            'controller_name' => 'ForumController',
+            'categorytree' => $forumHelper->getCategoriesAndMessage(),
+            'stats' => $forumHelper->getStats()
         ]);
     }
 
@@ -47,7 +39,7 @@ class ForumController extends AbstractController
         //For each author, check if he has at least one message, if ok, push it in the array
         //For each fetched user get his last message
 
-        return $this->render('forum/index.html.twig', [
+        return $this->render('forum/participant_of_category.html.twig', [
             'controller_name' => 'ForumController',
         ]);
     }
@@ -56,12 +48,20 @@ class ForumController extends AbstractController
      * List participants of a given category
      * @Route("/messageof/{id}", name="forum_message_of_author")
      */
-    public function messageOfAuthor(User $user)
+    public function messageOfAuthor(User $user, MessageRepository $messageRepository)
     {
         //Get all message of a given user
+        if (!$user) {
+            throw $this->createNotFoundException(
+                'Aucun utilisateur retrouvé avec cet id:  ' . $user->getId()
+            );
+        }
 
-        return $this->render('forum/index.html.twig', [
-            'controller_name' => 'ForumController',
+        return $this->render('forum/message_of_author.html.twig', [
+            'messages' => $messageRepository->findBy([
+                "user" => $user
+            ]),
+            'user'=>$user
         ]);
     }
 
@@ -79,32 +79,56 @@ class ForumController extends AbstractController
         ]);
     }
 
+
     /**
      * List participants of a given category
      * @Route("/category/{id}", name="forum_message_of_category")
      */
-    public function messageOfCategory(FcCategory $fcCategory)
+    public function messageOfCategory(FcCategory $fcCategory, MessageRepository $messageRepository)
     {
+        if (!$fcCategory) {
+            throw $this->createNotFoundException(
+                'Aucun categorie retrouvé avec cet id:  ' . $fcCategory->getId()
+            );
+        }
+
         //Get all message of a given category
         //Tool bar with: create a new message, mes message, dernier message non lu, messages sans reponse
-        return $this->render('forum/index.html.twig', [
-            'controller_name' => 'ForumController',
+        return $this->render('forum/message_of_category.html.twig', [
+            'messages' => $messageRepository->findBy([
+                "category" => $fcCategory
+            ]),
+            'category'=>$fcCategory
         ]);
     }
 
     /**
      * List participants of a given category
-     * @Route("/forum", name="forum_response_of_message")
+     * @Route("/message/{id}", name="forum_response_of_message")
      */
     public function responseOfMessage(Message $message)
     {
         //Get a message and it responses
 
         //User can post a new message as response of this message
-        return $this->render('forum/index.html.twig', [
+        return $this->render('forum/response_of_message.html.twig', [
             'controller_name' => 'ForumController',
         ]);
     }
+
+
+
+    /**
+     * List participants of a given category
+     * @Route("/nonreplied", name="forum_message_without_response")
+     */
+    public function messageWithNoReplies(ForumHelper $forumHelper)
+    {
+        return $this->render('forum/message_without_response.html.twig', [
+            'messages' => $forumHelper->getMessagesWithNoResponsesList(),
+        ]);
+    }
+
 
 
     /**

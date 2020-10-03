@@ -1,23 +1,37 @@
-{% extends 'layouts/base.html.twig' %}
+{% extends 'layouts/faq_base.html.twig' %}
 
 {% block title %}Faq index
 {% endblock %}
 
-{% block body %}
+{% block content %}
 
-	<h1>Réchercher une réponse</h1>
-	{{ form_start(form,{role: "form" }) }}
-	<div class="col-md-2">
-		<div class="form-group">
-			{{ form_widget(form.question, {"attr":{"class": 'form-control', "placeholder": "Que désirez-vous savoir ?"}}) }}
+	{# Search form #}
+	<div class="splash">
+		<div class="container">
+			<div class="row ">
+				<div class="col-lg-12 col-sm-12">
+					<h1 style="margin-bottom: 30px; font-style: italic;">Hey! Besoin d'aide sur etudiant.bj ?</h1>
+					<h4 style="color: white; margin-bottom: 20px; font-style: italic;">Recherchez une réponse ici</h4>
+					<div class=" justify-content-center">
+						{{ form_start(form,{role: "form"}) }}
+						<div class="col-lg-12 col-sm-12">
+							<div >
+								{{ form_widget(form.question, {"attr":{"class": 'form-control input-lg', "placeholder": "Que désirez-vous savoir ?" }}) }}
+							</div>
+							<div>
+								<button class="btn btn-dark btn-medium" type="submit">Posez la question</button>
+							</div>
+						</div>
+						{{ form_end( form ) }}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<button type="submit" class="btn btn-primary">Posez la question</button>
-	{{ form_end( form ) }}
 
+	{# Section search result #}
 
 	{% if displaySearchSection %}
-		<hr><hr><hr>
 		<div
 			id="result">
 
@@ -69,23 +83,30 @@
 		</div>
 	{% endif %}
 
-
-	<hr><hr><hr>
-	<h1 id="faq">Les catégorie de Faq</h1>
-	<div class="row text-center">
-		{% for faqCat in faq_categories %}
-			<div class="col-md-4">
-				<h3>
-					<a href="{{ path('faq_of_category', {id: faqCat.id }) }}">{{ faqCat.name }}
-					</a>
-				</h3>
-				<p>{{ faqCat.description }}</p>
+	<div class="section-tout">
+		<div class="container">
+			<h2>Catégorie de question fréquemment posées</h2>
+			<br>
+			<div class="row">
+				{% for faqCat in faq_categories %}
+					<div class="col-lg-4 col-sm-6">
+						<a href="{{ path('faq_of_category', {id: faqCat.id }) }}" class="badge">
+							<div class="icon">
+								<i class="fa fa-file-o white"></i>
+							</div>
+							<h4>{{ faqCat.name }}</h4>
+						</a>
+						<p>{{ faqCat.description }}</p>
+					</div>
+				{% else %}
+					<div class="col-lg-12 col-sm-12">
+						<h4>Oups...</h4>
+						<p>Aucune catégorie de forie à question n'est encore enregistrée par ici</p>
+					</div>
+				{% endfor %}
 			</div>
-		{% else %}
-			<div>
-				<h3>Oups...</h3>
-				<p>Aucune catégorie de forie à question n'est encore enregistrée par ici</p>
-			</div>
-		{% endfor %}
+		</div>
 	</div>
+
+
 {% endblock %}

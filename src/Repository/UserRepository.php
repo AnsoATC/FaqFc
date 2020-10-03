@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use PhpParser\Node\Expr\Cast\Array_;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -64,4 +65,28 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
     */
+
+    //Get user with at least one message posted
+    public function findParticipants(): ?Array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.firstMessagePostedAt != :firstMessagePostedAt')
+            ->setParameter('firstMessagePostedAt', null)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    //Get user with at least one message posted
+    public function findConnectedUser(): ?Array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.isConnected != :isConnected')
+            ->setParameter('isConnected', true)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MessageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,6 +43,22 @@ class Message
      * @ORM\Column(type="integer", nullable=true)
      */
     private $replies;
+
+  
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=FcCategory::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+   
 
     public function getId(): ?int
     {
@@ -103,6 +121,34 @@ class Message
     public function setReplies(?int $replies): self
     {
         $this->replies = $replies;
+
+        return $this;
+    }
+
+   
+
+  
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCategory(): ?FcCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?FcCategory $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

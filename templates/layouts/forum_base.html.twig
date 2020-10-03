@@ -1,12 +1,47 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
-</html>
+{% extends 'layouts/base.html.twig' %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('_assets/css/bootstrap.css')}}">
+	<link rel="stylesheet" href="{{ asset('_vendor/font-awesome/css/font-awesome.min.css')}}">
+	<link rel="stylesheet" href="{{ asset('_assets/css/custom.min.css')}}">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+{% endblock %}
+
+{% block body %}
+
+
+	{# Navbar #}
+	{{ include('layouts/partials/navbar.html.twig') }}
+	{% block content %}{% endblock %}
+	{{ include('layouts/partials/footer.html.twig') }}
+
+	{% block javascripts %}
+
+		<script src="{{ asset('_assets/jquery/jquery.min.js') }}"></script>
+
+		<script src="{{ asset('_assets/js/main.js') }}"></script>
+		{# <script>
+				!function (d, s, id) {
+		            var js,
+		            fjs = d.getElementsByTagName(s)[0];
+		            if (! d.getElementById(id)) {
+		            js = d.createElement(s);
+		            js.id = id;
+		            js.src = "https://platform.twitter.com/widgets.js";
+		            fjs.parentNode.insertBefore(js, fjs);
+		            }
+		            }(document, "script", "twitter-wjs");
+		
+		            /* FAQ */
+		            $(function () { // Since there's no list-group/tab integration in Bootstrap
+		            $('.list-group-item').on('click', function (e) {
+		            var previous = $(this).closest(".list-group").children(".active");
+		            previous.removeClass('active'); // previous list-item
+		            $(e.target).addClass('active'); // activated list-item
+		            });
+		            });
+		
+			</script> #}
+	{% endblock %}
+
+{% endblock %}

@@ -45,6 +45,16 @@ class MessageRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        
+        //return null;
+        // return $this->createQueryBuilder('m')
+        //     ->andWhere('m.id IN (:ids)')
+        //     ->setParameter('ids', $category)
+        //     ->orderBy('m.id', 'DESC')
+        //     ->setMaxResults(20)
+        //     ->getQuery()
+        //     ->getResult();
     }
     */
 
@@ -56,6 +66,27 @@ class MessageRepository extends ServiceEntityRepository
             ->orWhere('m.title  LIKE :title')
             ->setParameter('title', '%' . $question . '%')
             ->orderBy('m.id', 'ASC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findCountTotal()
+    {
+        return $this->createQueryBuilder('m')
+            ->select('count(m.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    //Get  messages of a category
+    public function findLastMessageOfCategory($category): ?array
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.category  = :category')
+            ->setParameter('category', $category)
+            ->orderBy('m.id', 'DESC')
             ->setMaxResults(100)
             ->getQuery()
             ->getResult();
