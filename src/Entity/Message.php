@@ -32,6 +32,16 @@ class Message
      */
     private $publishedAt;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $viewed;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $replies;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +79,30 @@ class Message
     public function setPublishedAt(\DateTimeInterface $publishedAt): self
     {
         $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    public function getViewed(): ?int
+    {
+        return $this->viewed;
+    }
+
+    public function setViewed(?int $viewed): self
+    {
+        $this->viewed = $viewed;
+
+        return $this;
+    }
+
+    public function getReplies(): ?int
+    {
+        return $this->replies;
+    }
+
+    public function setReplies(?int $replies): self
+    {
+        $this->replies = $replies;
 
         return $this;
     }
