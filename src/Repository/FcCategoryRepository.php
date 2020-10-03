@@ -56,7 +56,7 @@ class FcCategoryRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-  /**
+    /**
      * Find the item nearestPlace list
      */
     public function findAllCategories(): ?array
@@ -66,5 +66,4 @@ class FcCategoryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
 }

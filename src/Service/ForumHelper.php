@@ -69,7 +69,7 @@ class ForumHelper
 
     public function getMessagesWithNoResponsesList(): ?array
     {
-        
+
         return $this->messageTreeviewRepository->findUnrepliedMessages();
     }
 }

@@ -21,7 +21,6 @@ class ForumController extends AbstractController
      */
     public function index(ForumHelper $forumHelper)
     {
-        //Twig: Tool bar with: dernier message non lu for the logged user, messages sans reponse, 
         return $this->render('forum/index.html.twig', [
             'categorytree' => $forumHelper->getCategoriesAndMessage(),
             'stats' => $forumHelper->getStats()
@@ -35,22 +34,17 @@ class ForumController extends AbstractController
      */
     public function participantsOfCategory(FcCategory $fcCategory)
     {
-        //Get all author
-        //For each author, check if he has at least one message, if ok, push it in the array
-        //For each fetched user get his last message
-
         return $this->render('forum/participant_of_category.html.twig', [
             'controller_name' => 'ForumController',
         ]);
     }
 
     /**
-     * List participants of a given category
+     * List message an user
      * @Route("/messageof/{id}", name="forum_message_of_author")
      */
     public function messageOfAuthor(User $user, MessageRepository $messageRepository)
     {
-        //Get all message of a given user
         if (!$user) {
             throw $this->createNotFoundException(
                 'Aucun utilisateur retrouvé avec cet id:  ' . $user->getId()
@@ -67,21 +61,7 @@ class ForumController extends AbstractController
 
 
     /**
-     * Profile of an author
-     * @Route("/author/{id}", name="forum_author")
-     */
-    public function author(User $user)
-    {
-        //Get all message of a given user
-
-        return $this->render('forum/index.html.twig', [
-            'controller_name' => 'ForumController',
-        ]);
-    }
-
-
-    /**
-     * List participants of a given category
+     * List messages of a given category
      * @Route("/category/{id}", name="forum_message_of_category")
      */
     public function messageOfCategory(FcCategory $fcCategory, MessageRepository $messageRepository)
@@ -92,8 +72,6 @@ class ForumController extends AbstractController
             );
         }
 
-        //Get all message of a given category
-        //Tool bar with: create a new message, mes message, dernier message non lu, messages sans reponse
         return $this->render('forum/message_of_category.html.twig', [
             'messages' => $messageRepository->findBy([
                 "category" => $fcCategory
@@ -103,7 +81,7 @@ class ForumController extends AbstractController
     }
 
     /**
-     * List participants of a given category
+     * List responses of a given message
      * @Route("/message/{id}", name="forum_response_of_message")
      */
     public function responseOfMessage(Message $message)
@@ -117,31 +95,14 @@ class ForumController extends AbstractController
     }
 
 
-
     /**
-     * List participants of a given category
+     * List messages with no replies 
      * @Route("/nonreplied", name="forum_message_without_response")
      */
     public function messageWithNoReplies(ForumHelper $forumHelper)
     {
         return $this->render('forum/message_without_response.html.twig', [
             'messages' => $forumHelper->getMessagesWithNoResponsesList(),
-        ]);
-    }
-
-
-
-    /**
-     * Statistics data for the site manager about forum usage
-     * @Route("/forum", name="forum_statistics")
-     */
-    public function statistics()
-    {
-        //Get stat data:
-        //1. Nb of category, nb of message, most visited category, most replied message, least replied message,
-        // most active user
-        return $this->render('forum/index.html.twig', [
-            'controller_name' => 'ForumController',
         ]);
     }
 }
