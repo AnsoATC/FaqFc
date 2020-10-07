@@ -1,9 +1,9 @@
-{% extends 'layouts/faq_base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
 {% block title %}Faq index
 {% endblock %}
 
-{% block content %}
+{% block body %}
 
 	{# Search form #}
 	<div class="splash">
@@ -75,7 +75,7 @@
 					<div class=" col-md-12 text-center">
 						<h1>Désolé! Aucune réponse trouvée</h1>
 						<p>Nous vous suggérons de
-							<a href="{{ path('message_index')}}">poser votre question</a>
+							<a href="{{ path('forum_index')}}">poser votre question</a>
 							dans le forum</p>
 					</div>
 				</div>

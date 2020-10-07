@@ -58,7 +58,25 @@ class Message
      */
     private $category;
 
-   
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $repliedBy = [];
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $viewedBy = [];
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $responses = [];
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isResponse;
 
     public function getId(): ?int
     {
@@ -152,4 +170,55 @@ class Message
 
         return $this;
     }
+
+    public function getRepliedBy(): ?array
+    {
+        return $this->repliedBy;
+    }
+
+    public function setRepliedBy(?array $repliedBy): self
+    {
+        $this->repliedBy = $repliedBy;
+
+        return $this;
+    }
+
+    public function getViewedBy(): ?array
+    {
+        return $this->viewedBy;
+    }
+
+    public function setViewedBy(?array $viewedBy): self
+    {
+        $this->viewedBy = $viewedBy;
+
+        return $this;
+    }
+
+    public function getResponses(): ?array
+    {
+        return $this->responses;
+    }
+
+    public function setResponses(?array $responses): self
+    {
+        $this->responses = $responses;
+
+        return $this;
+    }
+
+    public function getIsResponse(): ?bool
+    {
+        return $this->isResponse;
+    }
+
+    public function setIsResponse(bool $isResponse): self
+    {
+        $this->isResponse = $isResponse;
+
+        return $this;
+    }
+ 
+
+   
 }

@@ -27,7 +27,7 @@ class SearchHelper
 
 
 
-    
+
     public function fromFcAndFaq($question)
     {
         $this->faqFoundResultArray = $this->faqRepository->search($question);
@@ -40,7 +40,7 @@ class SearchHelper
     {
         //Invoke search
         $this->fromFcAndFaq($question);
-        
+
         //return result
         return [
             "fromFaq" => [

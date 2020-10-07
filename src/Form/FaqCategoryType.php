@@ -14,12 +14,16 @@ class FaqCategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class,
-            [ 'required' => true,])
-            ->add('description',
-            TextareaType::class,
-            [ 'required' => true,])
-        ;
+            ->add(
+                'name',
+                TextType::class,
+                ['required' => true,]
+            )
+            ->add(
+                'description',
+                TextareaType::class,
+                ['required' => true,]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

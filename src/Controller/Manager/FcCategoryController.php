@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/manage/fccategory")
+ * @Route("/fccategory")
  */
 class FcCategoryController extends AbstractController
 {
@@ -39,7 +39,6 @@ class FcCategoryController extends AbstractController
             'form' => $form->createView(),
             'fc_categories' => $fcCategoryRepository->findAll()
         ]);
-
     }
 
     /**
@@ -67,7 +66,7 @@ class FcCategoryController extends AbstractController
      */
     public function delete(Request $request, FcCategory $fcCategory): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$fcCategory->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $fcCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($fcCategory);
             $entityManager->flush();

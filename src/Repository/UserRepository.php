@@ -67,26 +67,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     */
 
     //Get user with at least one message posted
-    public function findParticipants(): ?Array
+    public function findParticipants(): ?array
     {
         return $this->createQueryBuilder('u')
-            ->andWhere('u.firstMessagePostedAt != :firstMessagePostedAt')
-            ->setParameter('firstMessagePostedAt', null)
+            ->andWhere('u.totalMessage >= :totalMessage')
+            ->setParameter('totalMessage', 1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     //Get user with at least one message posted
-    public function findConnectedUser(): ?Array
+    public function findConnectedUser(): ?array
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.isConnected != :isConnected')
             ->setParameter('isConnected', true)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-
-    
 }

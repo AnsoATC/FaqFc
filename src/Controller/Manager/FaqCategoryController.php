@@ -5,18 +5,23 @@ namespace App\Controller\Manager;
 use App\Entity\FaqCategory;
 use App\Form\FaqCategoryType;
 use App\Repository\FaqCategoryRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/manage/faqcategory")
+ * Only manager can access this
+ */
+/**
+ * @Route("/faqcategory")
  */
 class FaqCategoryController extends AbstractController
 {
     /**
      * @Route("/", name="faq_category_index", methods={"GET","POST"})
+     * List faq category and create new
      */
     public function index(FaqCategoryRepository $faqCategoryRepository, Request $request): Response
     {
@@ -38,7 +43,7 @@ class FaqCategoryController extends AbstractController
             'faq_categories' => $faqCategoryRepository->findAll(),
         ]);
     }
-   
+
 
     /**
      * @Route("/{id}/edit", name="faq_category_edit", methods={"GET","POST"})
@@ -65,7 +70,7 @@ class FaqCategoryController extends AbstractController
      */
     public function delete(Request $request, FaqCategory $faqCategory): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$faqCategory->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $faqCategory->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($faqCategory);
             $entityManager->flush();

@@ -64,11 +64,6 @@ class User implements UserInterface
     private $lastName;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Message::class, mappedBy="author")
-     */
-    private $messages;
-
-    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isConnected;
@@ -78,9 +73,13 @@ class User implements UserInterface
      */
     private $lastConnectedAt;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isStudent;
+
     public function __construct()
     {
-        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,33 +220,7 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Message[]
-     */
-    public function getMessages(): Collection
-    {
-        return $this->messages;
-    }
-
-    public function addMessage(Message $message): self
-    {
-        if (!$this->messages->contains($message)) {
-            $this->messages[] = $message;
-            $message->addAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMessage(Message $message): self
-    {
-        if ($this->messages->contains($message)) {
-            $this->messages->removeElement($message);
-            $message->removeAuthor($this);
-        }
-
-        return $this;
-    }
+  
 
     public function getIsConnected(): ?bool
     {
@@ -269,6 +242,18 @@ class User implements UserInterface
     public function setLastConnectedAt(?\DateTimeInterface $lastConnectedAt): self
     {
         $this->lastConnectedAt = $lastConnectedAt;
+
+        return $this;
+    }
+
+    public function getIsStudent(): ?bool
+    {
+        return $this->isStudent;
+    }
+
+    public function setIsStudent(?bool $isStudent): self
+    {
+        $this->isStudent = $isStudent;
 
         return $this;
     }

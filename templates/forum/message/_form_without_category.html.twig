@@ -1,0 +1,37 @@
+{% set formErrors = form.vars.errors.form.getErrors(true) %}
+{% if formErrors|length %}
+	<div class="alert alert-danger" role="alert">
+		<ul>
+			{% for error in formErrors %}
+				<li>{{ error.message }}
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endif %}
+
+{{ form_start(form) }}
+{# Les champs du formulaire #}
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			<label for="itemTypeSelection">Titre</label>
+			{{ form_widget(form.title, {"attr":{"class": 'form-control'}}) }}
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-group">
+			<label for="itemTypeSelection">Message</label>
+			{{ form_widget(form.content, {"attr":{"class": 'form-control'}}) }}
+		</div>
+	</div>
+</div>
+
+
+<button type="btn" class="btn btn-primary pull-right">{{ button_label|default('Poster') }}</button>
+<div class="clearfix"></div>
+{{ form_end(form) }}

@@ -34,7 +34,7 @@ class FaqController extends AbstractController
     }
 
     /**
-     * @Route("/", name="faq_index", methods={"GET","POST", "DELETE"})
+     * @Route("/", name="faq_index", methods={"GET","POST"})
      */
     public function index(FaqRepository $faqRepository, Request $request): Response
     {
@@ -57,7 +57,7 @@ class FaqController extends AbstractController
         ]);
     }
 
-    
+
 
     /**
      * @Route("/{id}/edit", name="faq_edit", methods={"GET","POST"})

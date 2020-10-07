@@ -2,23 +2,23 @@
 
 namespace App\Service;
 
+use App\Entity\FcCategory;
+use App\Entity\Message;
+use App\Entity\User;
 use App\Repository\FcCategoryRepository;
 use App\Repository\MessageRepository;
-use App\Repository\MessageTreeviewRepository;
 use App\Repository\UserRepository;
 
 class ForumHelper
 {
     private $messageRepository;
     private $fcCategoryRepository;
-    private $messageTreeviewRepository;
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository, FcCategoryRepository $fcCategoryRepository, MessageTreeviewRepository $messageTreeviewRepository, MessageRepository $messageRepository)
+    public function __construct(UserRepository $userRepository, FcCategoryRepository $fcCategoryRepository,  MessageRepository $messageRepository)
     {
         $this->fcCategoryRepository = $fcCategoryRepository;
         $this->messageRepository = $messageRepository;
-        $this->messageTreeviewRepository = $messageTreeviewRepository;
         $this->userRepository = $userRepository;
     }
 
@@ -37,7 +37,10 @@ class ForumHelper
             // Stat about message
             "message" => [
                 "count" => $this->messageRepository->findCountTotal(),
-                "noreplied" => sizeof($this->messageTreeviewRepository->findUnrepliedMessages())
+                "noreplied" => [
+                    "count" => $this->messageRepository->findCountTotalNonRepliedMessage(),
+                    "list" => $this->messageRepository->findNonRepliedMessages()
+                ]
             ],
             // Stats about participants
             "participants" => [
@@ -67,9 +70,25 @@ class ForumHelper
         return $categoriesTreeview;
     }
 
-    public function getMessagesWithNoResponsesList(): ?array
+    public function responsesListOf(Message $question): ?array
     {
 
-        return $this->messageTreeviewRepository->findUnrepliedMessages();
+        return $this->messageRepository->findResponsesOf($question);
+    }
+
+    public function isUserFirstPost(User $user): ?bool
+    {
+        return $this->messageRepository->findCountTotalMessageOf($user) == 0 ? true : false;
+    }
+
+
+    public function getParticipantsListOf(FcCategory $category): ?array
+    {
+        return $this->messageRepository->findParticipantsOfCategory($category);
+    }
+
+    public function getNonRepliedMessages(): ?array
+    {
+        return $this->messageRepository->findNonRepliedMessages();
     }
 }

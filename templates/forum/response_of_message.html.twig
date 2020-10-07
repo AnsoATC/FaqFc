@@ -1,22 +1,70 @@
-<!DOCTYPE html>
+{% extends "layouts/base.html.twig" %}
 
-<title>Hello ForumController!</title>
+{% block title %}
+	Réponses à
+	{{ message.title }}
+{% endblock %}
 
 {% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title text-center">
+						{{ message.title}}</h4>
+					<div class="text-center"></div>
+				</div>
+				<div class="card-body">
+					{{ message.content }}
+				</div>
+			</div>
+		</div>
 
-	<div class="example-wrapper">
-   Réponses à un message du forum
+		<h2>Répondre
+		</h2>
+
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header card-header-primary">
+					<h4 class="card-title text-center">Participer à la discussion</h4>
+					<div class="text-center"></div>
+				</div>
+				<div class="card-body">
+					{{ include('forum/message/_form_without_category.html.twig', {'button_label': 'Commenter'}) }}
+					<div class="row text-center">
+						<div class="col-md-6">
+							<div class="form-group"></div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<a href="{{ path("forum_index") }}">
+									<button class="btn btn-info">Accueil du forum</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<br>
+			<h1>Commentaires</h1>
+			{% for message in responses %}
+				<li>
+                   
+				   <p>
+					<h4>{{ message.title }}</h4>
+					{{ message.content }}
+					</p>
+					Par
+					<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
+				</li>
+			{% else %}
+				Ce Message n'a aucune responses actuellement.
+
+			{% endfor %}
+
+		</div>
 	</div>
 {% endblock %}
