@@ -64,4 +64,13 @@ class HomeController extends AbstractController
             'displaySearchSection' => $displaySearchSection
         ]);
     }
+
+        /**
+         * @Route("/sans",name="sans")
+         */
+    public function sansBlag(){
+        return $this->render('fileName.html.twig',[
+            
+        ]);
+    }
 }

@@ -1,70 +1,112 @@
-{% extends "layouts/base.html.twig" %}
-
+{% extends "layouts/layouts.html.twig" %}
 {% block title %}
 	Réponses à
 	{{ message.title }}
 {% endblock %}
 
-{% block body %}
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header card-header-primary">
-					<h4 class="card-title text-center">
-						{{ message.title}}</h4>
-					<div class="text-center"></div>
-				</div>
-				<div class="card-body">
-					{{ message.content }}
-				</div>
-			</div>
-		</div>
+{# Page header #}
+{% block header %}
+	<section class="content-header mt-5">
+		<h1>
+			FORUM
+			<a href="/">
+				<small>Retour</small>
+			</a>
+		</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a href="/">
+					<i class="fa fa-dashboard"></i>
+					Accueil</a>
+			</li>
+			<li>
+				<a href="#">forum</a>
+			</li>
+		</ol>
+	</section>
+{% endblock %}
 
-		<h2>Répondre
-		</h2>
 
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header card-header-primary">
-					<h4 class="card-title text-center">Participer à la discussion</h4>
-					<div class="text-center"></div>
-				</div>
-				<div class="card-body">
-					{{ include('forum/message/_form_without_category.html.twig', {'button_label': 'Commenter'}) }}
-					<div class="row text-center">
-						<div class="col-md-6">
-							<div class="form-group"></div>
+{# Page content #}
+{% block content %}
+
+	{# Forum tool bar #}
+	{% include "layouts/partials/forum_toolbar.html.twig" %}
+	<div class="section-preview mt-2 container">
+
+		<div class="row">
+			<div class="col-md-12  col-xs-12  col-sm-12">
+				<article class="mb-5">
+					<div class="card border-warning mb-3">
+
+						<div class="card-header bg-transparent border-warning bg-light">
+							<i class="fa fa-file-o" style="margin-right: 5px;" aria-hidden="true"></i>
+							Poster le
+							{{ message.publishedAt ? message.publishedAt|date('d/m/Y') : '' }}
+							à
+							{{ message.publishedAt ? message.publishedAt|date('h:i') : ''}}
+							par
+							<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
 						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<a href="{{ path("forum_index") }}">
-									<button class="btn btn-info">Accueil du forum</button>
-								</a>
+
+						<div class="card-body">
+							<h5 class="card-title">
+								<a href="#">{{ message.title }}</a>
+							</h5>
+							<p class="card-text" style="margin-left: 10px;">
+								{{ message.content }}</p>
+							<div class="row pull-right">
+								<button type="button" class="btn btn-outline-secondary pull-right mr-2" data-toggle="modal" data-target="#edit">
+									<i class="fa fa-thumbs-o-up"></i>
+								</button>
+								<button type="button" class="btn btn-outline-danger pull-right mr-2" data-toggle="modal" data-target="#delete">
+									<i class="fa fa-thumbs-o-down"></i>
+								</button>
 							</div>
 						</div>
 					</div>
+				</article>
+
+				{# Add new comment section  #}
+				<div class="col-md-12  col-xs-12  col-sm-12">
+					<h4 class="text-center text-uppercase">Laisser un commentaire</h4><br>
+					{{ include('forum/message/_form_without_category.html.twig', {'button_label': 'Commenter'}) }}
+				</div>
+
+
+				<h3 class="mb-4">Tous les commentaires</h3>
+				<div class="col-md-11 mx-auto">
+
+					{% for message in responses %}
+						<div class="show mb-3" aria-live="assertive" aria-atomic="true">
+							<div class="toast-header">
+								<strong class="mr-auto">
+									<a href="#">{{ message.title }}</a>
+								</strong>
+							</div>
+							<div class="toast-body">
+								{{ message.content }}
+
+								<br>
+								<small class="pull-right">
+									<i class="fa fa-user-o" style="margin-right: 10px;" aria-hidden="true"></i>
+									<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
+									le
+
+									{{ message.publishedAt ? message.publishedAt|date('d/m/Y') : '' }}
+									à
+									{{ message.publishedAt ? message.publishedAt|date('h:i') : ''}}</small>
+							</div>
+						</div>
+					{% else %}
+						<p>Soyez le premier à laisser un commentaire.</p>
+
+					{% endfor %}
+
 				</div>
 			</div>
 		</div>
-
-		<div class="col-md-12">
-			<br>
-			<h1>Commentaires</h1>
-			{% for message in responses %}
-				<li>
-                   
-				   <p>
-					<h4>{{ message.title }}</h4>
-					{{ message.content }}
-					</p>
-					Par
-					<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
-				</li>
-			{% else %}
-				Ce Message n'a aucune responses actuellement.
-
-			{% endfor %}
-
-		</div>
 	</div>
+	{# Stats widgets #}
+	{% include "layouts/partials/stats.html.twig" %}
 {% endblock %}

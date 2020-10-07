@@ -72,13 +72,14 @@ class ForumController extends AbstractController
         return $this->render('forum/message/new.html.twig', [
             'message' => $message,
             'form' => $form->createView(),
+            'stats' => $forumHelper->getStats()
         ]);
     }
 
 
     /**
      * List of person who have create a post|message in a given category
-     * @Route("/authorsof/?messagecategory={id}", name="forum_participant_of_category")
+     * @Route("/authorsof/messagecategory={id}", name="forum_participant_of_category")
      */
     public function participantsOfCategory(FcCategory $fcCategory, ForumHelper $forumHelper)
     {
@@ -89,7 +90,9 @@ class ForumController extends AbstractController
         }
 
         return $this->render('forum/participant_of_category.html.twig', [
-            'participants' => $forumHelper->getParticipantsListOf($fcCategory)
+            'participants' => $forumHelper->getParticipantsList(),
+            'stats' => $forumHelper->getStats(),
+            'category'=> $fcCategory
         ]);
     }
 
@@ -97,7 +100,7 @@ class ForumController extends AbstractController
      * List message of an user
      * @Route("/messageof/user={id}", name="forum_message_of_author")
      */
-    public function messageOfAuthor(User $user, MessageRepository $messageRepository)
+    public function messageOfAuthor(User $user, MessageRepository $messageRepository,ForumHelper $forumHelper)
     {
         if (!$user) {
             throw $this->createNotFoundException(
@@ -109,7 +112,8 @@ class ForumController extends AbstractController
             'messages' => $messageRepository->findBy([
                 "user" => $user
             ]),
-            'user' => $user
+            'user' => $user,
+            'stats' => $forumHelper->getStats()
         ]);
     }
 
@@ -118,7 +122,7 @@ class ForumController extends AbstractController
      * List messages of a given category
      * @Route("/messageof/category={id}", name="forum_message_of_category")
      */
-    public function messageOfCategory(FcCategory $fcCategory, MessageRepository $messageRepository)
+    public function messageOfCategory(FcCategory $fcCategory, MessageRepository $messageRepository, ForumHelper $forumHelper)
     {
         if (!$fcCategory) {
             throw $this->createNotFoundException(
@@ -131,6 +135,8 @@ class ForumController extends AbstractController
                 "category" => $fcCategory
             ]),
             'category' => $fcCategory
+            ,
+            'stats' => $forumHelper->getStats()
         ]);
     }
 
@@ -236,7 +242,9 @@ class ForumController extends AbstractController
         return $this->render('forum/response_of_message.html.twig', [
             'message' => $message,
             'responses' => $responses,
-            'form' => $form->createView(),
+            'form' => $form->createView()
+            ,
+            'stats' => $forumHelper->getStats()
         ]);
     }
 
@@ -248,7 +256,9 @@ class ForumController extends AbstractController
     public function messageWithNoReplies(ForumHelper $forumHelper)
     {
         return $this->render('forum/message_without_response.html.twig', [
-            'messages' => $forumHelper->getNonRepliedMessages(),
+            'messages' => $forumHelper->getNonRepliedMessages()
+            ,
+            'stats' => $forumHelper->getStats()
         ]);
     }
 }

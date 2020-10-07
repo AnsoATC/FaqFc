@@ -1,0 +1,33 @@
+<!-- Stats content -->
+<div class="card container-fluid">
+	<h2 class="card-header text-center">
+		Statistique
+	</h2>
+	<div class="card-body text-center">
+		{% if stats != null %}
+			<strong class="card-text">{{ stats.participants.count  }}
+				utilisateurs 
+														participent avec
+				{{ stats.message.count  }}
+				message postés
+														répartis dans
+				{{ stats.category.count  }}
+				rubriques
+			</strong>
+
+      <br>
+			<strong class="card-text">
+				{% if stats.participants.connected.count >= 1 %}
+					{{ stats.participants.connected.count  }}
+					en ligne actuellement:
+				{% endif %}
+
+
+				{% for user in  stats.participants.connected.list %}
+					{{ user.email }},
+					{% else %}
+				{% endfor %}
+			</strong>
+		{% endif %}
+	</div>
+</div>

@@ -1,35 +1,43 @@
-
-{% extends "layouts/base.html.twig" %}
-
-{% block title %}Poster un message
+{% extends "layouts/layouts.html.twig" %}
+{% block title %}
+	Réponses à
 {% endblock %}
 
-{% block body %}
-	<div class="row">
-		<div class="col-md-12">
-			<div class="card">
-				<div class="card-header card-header-primary">
-					<h4 class="card-title text-center">Poster un message</h4>
-					<div class="text-center">
-						{# {{ fileUploadingInfos }} #}
-					</div>
-				</div>
-				<div class="card-body">
-					{{ include('forum/message/_form.html.twig', {'button_label': 'Poster'}) }}
-					<div class="row text-center">
-						<div class="col-md-6">
-							<div class="form-group"></div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-									<a href="{{ path("forum_index") }}">
-										<button class="btn btn-info">Accueil du forum</button>
-									</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+{# Page header #}
+{% block header %}
+	<section class="content-header mt-5">
+		<h1>
+			FORUM
+			<a href="/">
+				<small>Retour</small>
+			</a>
+		</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a href="/">
+					<i class="fa fa-dashboard"></i>
+					Accueil</a>
+			</li>
+			<li>
+				<a href="#">forum</a>
+			</li>
+		</ol>
+	</section>
+{% endblock %}
+
+
+{# Page content #}
+{% block content %}
+
+	{# Forum tool bar #}
+	{% include "layouts/partials/forum_toolbar.html.twig" %}
+	<div class="col-md-12">
+      <div class="section-preview col-md-11 mx-auto" style="margin-top: 5%; margin-right: 5%;">
+        <h3 class="text-primary text-center text-uppercase">Creer un sujet</h3><br>
+		{{ include('forum/message/_form.html.twig', {'button_label': 'Poster'}) }}
+        
+      </div>
+    </div>
+	{# Stats widgets #}
+	{% include "layouts/partials/stats.html.twig" %}
 {% endblock %}

@@ -1,0 +1,25 @@
+<div class="bg-light col-md-10 mx-auto mt-5" style="border-radius: 5px;">
+	<form method="post" action="<?php echo base_url(); ?>location/trier" class="form-inline">
+		<div class="row col-md-12">
+			<div class="row form-group col-md-3">
+				<div>
+					<label class="mb-2 text-dark" style="font-weight: bold;">
+						<a href="{{ path('forum_message_new') }}">Poster un nouveau message</a>
+					</label>
+				</div>
+			</div>
+			<div class="row form-group col-md-3">
+				<div>
+					<label class="mb-2 text-dark" style="font-weight: bold;">
+						<a href="{{ path('forum_message_without_response') }}">{{ stats.message.noreplied.count }}
+							messages sans réponse</a>
+					</label>
+				</div>
+			</div>
+			<div class="col-md-4 pull-right">
+				<button type="button" class="btn btn-outline-primary pull-right mr-8" data-toggle="modal" data-target="#creat">Créer une rubrique</button>
+				<button type="button" class="btn btn-outline-warning pull-right mr-6" data-toggle="modal" data-target="#edite">Modifier</button>
+			</div>
+		</div>
+	</form>
+</div>

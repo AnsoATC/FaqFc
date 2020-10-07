@@ -1,11 +1,10 @@
-{% extends 'layouts/base.html.twig' %}
-
-{% block title %}Faq index
+{% extends "layouts/layouts.html.twig" %}
+{% block title %}
+	Réponses à
 {% endblock %}
 
-{% block body %}
-
-	{# Search form #}
+{# Page header #}
+{% block header %}
 	<div class="splash">
 		<div class="container">
 			<div class="row ">
@@ -15,7 +14,7 @@
 					<div class=" justify-content-center">
 						{{ form_start(form,{role: "form"}) }}
 						<div class="col-lg-12 col-sm-12">
-							<div >
+							<div>
 								{{ form_widget(form.question, {"attr":{"class": 'form-control input-lg', "placeholder": "Que désirez-vous savoir ?" }}) }}
 							</div>
 							<div>
@@ -28,85 +27,162 @@
 			</div>
 		</div>
 	</div>
-
-	{# Section search result #}
-
-	{% if displaySearchSection %}
-		<div
-			id="result">
+	<div id="result">
+	{% endblock %}
+	{# Page content #}
+	{% block content %}
+		{% if displaySearchSection %}
 
 			{# Result from the faq #}
 			{% if  responses.fromFaq.count >=1 %}
-				<div class="row">
-					<div class=" col-md-12 text-center">
-						<h1 class=" text-center">
-							{{ responses.fromFaq.count }}
-							trouvé (s) dans les faq</h1>
-						{% for faq in responses.fromFaq.list %}
-							<div class=" col-md-4 text-center">
-								<h3>
-									{{ faq.question }}</h3>
-								<p>{{ faq.response }}</p>
+				{# <div class="row">
+									<div class=" col-md-12 text-center">
+										<h1 class=" text-center">
+											{{ responses.fromFaq.count }}
+											trouvé (s) dans les faq</h1>
+										{% for faq in responses.fromFaq.list %}
+											<div class=" col-md-4 text-center">
+												<h3>
+													{{ faq.question }}</h3>
+												<p>{{ faq.response }}</p>
+											</div>
+										{% endfor %}
+									</div>
+								</div> #}
+				<div style="padding-bottom: 50px;">
+					<div class="col-md-10 mx-auto">
+						<h4 class="text-left" id="categorie1">{{ responses.fromFaq.count }}
+							trouvé (s) dans les faq</h4><hr>
+						<div class="tab-content panels-faq">
+							<div class="tab-pane active" id="tab1">
+								<div class="panel-group" id="help-accordion-1">
+									{% for faq in responses.fromFaq.list %}
+										<div class="panel panel-default panel-help">
+											<a href="#{{ " open_" ~ faq.id }}" data-toggle="collapse" data-parent="#help-accordion-1">
+												<div class="panel-heading card border-warning">
+													<h2>
+														<span class="glyphicon glyphicon-question-sign"></span>
+														{{ faq.question }}</h2>
+												</div>
+											</a>
+											<div id="{{ "open_" ~ faq.id }}" class="collapse in">
+												<div class="panel-body">
+													<p>{{ faq.response }}</p>
+												</div>
+											</div>
+										</div>
+									{% endfor %}
+
+								</div>
 							</div>
-						{% endfor %}
+						</div>
 					</div>
 				</div>
 			{% endif %}
 
 			{# Section to display result from forum #}
 			{% if  responses.fromFc.count >= 1 %}
-				<hr>
-				<hr>
-				<h1>
-					{{ responses.fromFc.count }}
-					trouvé (s) dans les messages du forum</h1>
-				{% for message in responses.fromFc.list %}
-					<div class=" col-md-4">
-						<h3>
-							{{ message.title }}</h3>
-						<p>{{ message.content }}</p>
-					</div>
-				{% endfor %}
-			{% endif %}
-
-			{# Only when zero result is found #}
-			{% if  responses.fromFaq.count == 0 and  responses.fromFc.count == 0 %}
 				<div class="row">
-					<div class=" col-md-12 text-center">
-						<h1>Désolé! Aucune réponse trouvée</h1>
-						<p>Nous vous suggérons de
-							<a href="{{ path('forum_index')}}">poser votre question</a>
-							dans le forum</p>
-					</div>
-				</div>
-			{% endif %}
-		</div>
-	{% endif %}
-
-	<div class="section-tout">
-		<div class="container">
-			<h2>Catégorie de question fréquemment posées</h2>
-			<br>
-			<div class="row">
-				{% for faqCat in faq_categories %}
-					<div class="col-lg-4 col-sm-6">
-						<a href="{{ path('faq_of_category', {id: faqCat.id }) }}" class="badge">
-							<div class="icon">
-								<i class="fa fa-file-o white"></i>
+					<div class="col-md-12">
+						<div class="section-preview col-md-11 mx-auto">
+							<h1 class="mb-3 text-dark">{{ responses.fromFc.count }}
+								trouvé (s) dans les messages du forum</h1>
+							<div class="card border-warning">
+								<div class="card-header bg-light">
+									<div class="row no-gutter">
+										<div class="col-7 text-center">
+											<i class="fa fa-file-o" aria-hidden="true"></i>
+										</div>
+										<div class="col-1 text-center">
+											<i class="fa fa-reply" aria-hidden="true"></i>
+										</div>
+										<div class="col-1 text-center">
+											<i class="fa fa-eye" aria-hidden="true"></i>
+										</div>
+										<div class="col-3 text-center">
+											<i class="fa fa-clock-o" aria-hidden="true"></i>
+										</div>
+									</div>
+								</div>
+								{% for  message in responses.fromFc.list  %}
+									<div class="card-body">
+										<ul class="list-group list-group-flush">
+											<div class="row no-gutter list-item">
+												<div class="col-7">
+													<h4 class="card-title">
+														<a href="{{ path('forum_response_of_message',{id: message.id }) }}">{{ message.title }}</a>
+													</h4>
+													{# <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+																																																																																		                    card's content...</p> #}
+												</div>
+												<div class="col-1 text-center">
+													{{ message.replies }}
+												</div>
+												<div class="col-1 text-center">
+													{{ message.viewed }}
+												</div>
+												<div class="col-3 text-center" style="padding-left: 5px;">
+													<i class="fa fa-user-o" style="margin-right: 5px;" aria-hidden="true"></i>
+													<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
+													<br>
+													<i class="fa fa-file-o" style="margin-right: 5px;" aria-hidden="true"></i>
+													{{ message.publishedAt ? message.publishedAt|date('d/m/Y') : '' }}
+													à
+													{{ message.publishedAt ? message.publishedAt|date('h:i') : ''}}
+												</div>
+											</div>
+										</ul>
+									</div>
+								{% endfor %}
 							</div>
-							<h4>{{ faqCat.name }}</h4>
-						</a>
-						<p>{{ faqCat.description }}</p>
+						</div>
 					</div>
-				{% else %}
-					<div class="col-lg-12 col-sm-12">
-						<h4>Oups...</h4>
-						<p>Aucune catégorie de forie à question n'est encore enregistrée par ici</p>
-					</div>
-				{% endfor %}
+				{% endif %}
+
+				{# Only when zero result is found #}
+				{% if  responses.fromFaq.count == 0 and  responses.fromFc.count == 0 %}
+					<section class="container-fluid">
+						<div class="row text-center">
+							<div class="col-md-3"></div>
+							<div class="card col-md-6">
+								<div class="card-header  bg-warning">
+									Désolé! Aucune réponse trouvée
+								</div>
+								<div class="card-body">
+									<h5 class="card-title">Désolé! Aucune réponse trouvée</h5>
+									<p class="card-text">Nous vous suggérons de
+										<a href="{{ path('forum_index')}}" class="link link-primary">poser votre question</a>
+										dans le forum</p>
+								</div>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+					</section>
+				{% endif %}
+			</div>
+		{% endif %}
+		<div class="section-tout">
+			<div class="container">
+				<h2>Catégorie de question fréquemment posées</h2>
+				<br>
+				<div class="row">
+					{% for faqCat in faq_categories %}
+						<div class="col-lg-4 col-sm-6">
+							<a href="{{ path('faq_of_category', {id: faqCat.id }) }}" class="badge">
+								<div class="icon">
+									<i class="fa fa-file-o white"></i>
+								</div>
+								<h4>{{ faqCat.name }}</h4>
+							</a>
+							<p>{{ faqCat.description }}</p>
+						</div>
+					{% else %}
+						<div class="col-lg-12 col-sm-12">
+							<h4>Oups...</h4>
+							<p>Aucune catégorie de forie à question n'est encore enregistrée par ici</p>
+						</div>
+					{% endfor %}
+				</div>
 			</div>
 		</div>
-	</div>
-
-
-{% endblock %}
+	{% endblock %}

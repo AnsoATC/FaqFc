@@ -1,8 +1,36 @@
-{% extends 'layouts/base.html.twig' %}
 
-{% block title %}Faq index
+
+{% extends "layouts/layouts.html.twig" %}
+{% block title %}
+	Réponses à
 {% endblock %}
-{% block body %}
+
+{# Page header #}
+{% block header %}
+	<section class="content-header mt-5">
+		<h1>
+			FORUM
+			<a href="/">
+				<small>Retour</small>
+			</a>
+		</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a href="/">
+					<i class="fa fa-dashboard"></i>
+					Accueil</a>
+			</li>
+			<li>
+				<a href="#">forum</a>
+			</li>
+		</ol>
+	</section>
+{% endblock %}
+
+
+{# Page content #}
+{% block content %}
+
 	<p class="text-center">Cette page contient toutes les réponses à quelques questions relevées comme fréquemment posées par rapport à {{ faqCategory.name }}.</p>
 		<div class="container">
 			<div style="padding-bottom: 50px;">
@@ -16,7 +44,6 @@
 								<p class="text-left">
 									{{ faqCategory.description }}
 								</p>
-
 								{% for faq in faqs %}
 									<div class="panel panel-default panel-help">
 										<a href="#{{ "open_" ~ faq.id }}" data-toggle="collapse" data-parent="#help-accordion-1">
@@ -38,8 +65,6 @@
 										<p>Aucune question réponse n'est encore enregistrée par ici</p>
 									</div>
 								{% endfor %}
-
-
 								<p>Votre question ne se trouve pas dans la liste qui vous ai proposer? 
 									<a href="{{ path('forum_index') }}">poster une question dans le forum</a></p>
 							</div>
@@ -49,3 +74,4 @@
 			</div>
 		</div>
 {% endblock %}
+

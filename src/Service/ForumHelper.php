@@ -87,6 +87,13 @@ class ForumHelper
         return $this->messageRepository->findParticipantsOfCategory($category);
     }
 
+    public function getParticipantsList(): ?array
+    {
+        return $this->userRepository->findParticipants();
+    }
+
+    
+
     public function getNonRepliedMessages(): ?array
     {
         return $this->messageRepository->findNonRepliedMessages();

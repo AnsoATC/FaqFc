@@ -213,31 +213,6 @@ section {
 }
 /* Footer links */
 
-.dmtop {
-  background-image: url('../img/arrow.png');
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  z-index: 9999;
-  width: 40px;
-  height: 40px;
-  text-indent: -99999px;
-  position: fixed;
-  bottom: -100px;
-  right: 25px;
-  cursor: pointer;
-  -webkit-transition: all .7s ease-in-out;
-  -moz-transition: all .7s ease-in-out;
-  -o-transition: all .7s ease-in-out;
-  -ms-transition: all .7s ease-in-out;
-  transition: all .7s ease-in-out;
-  overflow: auto;
-  background-color: #FE9A2E;
-}
-
-.dmtop:hover {
-  background-color: #3E4246;
-}
-
 .footer-distributed {
   background-color: #87c1ea;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
@@ -369,19 +344,3 @@ section {
   padding:15px 15px;
 }
 /* Top bar */
-
-.rubrique{
-  color: #FE9A2E;margin: 5px;
-}
-
-.no-gutter > [class*='col-']{
-  margin-left: 0px;
-  margin-right: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  border-right: 1px solid #ddd;
-}
-.list-item{
-  margin-bottom: 5px;
-  border: 1px solid #ddd;
-}

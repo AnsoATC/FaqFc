@@ -1,41 +1,99 @@
-<!DOCTYPE html>
+{% extends "layouts/layouts.html.twig" %}
 
-<title>Hello ForumController!</title>
-
-{% block body %}
-	<style>
-		.example-wrapper {
-			margin: 1em auto;
-			max-width: 800px;
-			width: 95%;
-			font: 18px / 1.5 sans-serif;
-		}
-		.example-wrapper code {
-			background: #F5F5F5;
-			padding: 2px 6px;
-		}
-	</style>
-
-<div class="example-wrapper">
-		<h1>Message sans réponse</h1>
-
-		{% if  messages|length >=1 %}
-			{% for message in messages %}
-				<li>
-
-					<a href="{{ path('forum_response_of_message',{id: message.id }) }}">{{ message.title }}</a>
-
-					{{ message.viewed }}
-
-					{{ message.replies }}
-					<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
-
-
-				</li>
-			{% endfor %}
-		{% else %}
-			Aucun message sans réponse
-			
-		{% endif %}
-	</div>
+{# Page header #}
+{% block header %}
+	<section class="content-header mt-5">
+		<h1>
+			FORUM
+			<a href="/">
+				<small>Retour</small>
+			</a>
+		</h1>
+		<ol class="breadcrumb">
+			<li>
+				<a href="/">
+					<i class="fa fa-dashboard"></i>
+					Accueil</a>
+			</li>
+			<li>
+				<a href="#">forum</a>
+			</li>
+		</ol>
+	</section>
 {% endblock %}
+
+
+{# Page content #}
+{% block content %}
+
+	{# Forum tool bar #}
+	{% include "layouts/partials/forum_toolbar.html.twig" %}
+
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="section-preview col-md-11 mx-auto">
+				<h1 class="mb-3 text-dark">Message sans réponses</h1>
+					<ol class="breadcrumb" id="Rub1">
+						<li class="breadcrumb-item active">
+							<i style="margin: 5px; color: #FE9A2E;" class="fa fa-rss"></i>Dans toutes les rubriques du forum
+						</li>
+					</ol>
+					<div class="card border-warning">
+						<div class="card-header bg-light">
+							<div class="row no-gutter">
+								<div class="col-7 text-center">
+									<i class="fa fa-file-o" aria-hidden="true"></i>
+								</div>
+								<div class="col-1 text-center">
+									<i class="fa fa-reply" aria-hidden="true"></i>
+								</div>
+								<div class="col-1 text-center">
+									<i class="fa fa-eye" aria-hidden="true"></i>
+								</div>
+								<div class="col-3 text-center">
+									<i class="fa fa-clock-o" aria-hidden="true"></i>
+								</div>
+							</div>
+						</div>
+							{% for  message in messages  %}
+								<div class="card-body">
+									<ul class="list-group list-group-flush">
+										<div class="row no-gutter list-item">
+											<div class="col-7">
+												<h4 class="card-title">
+													<a href="{{ path('forum_response_of_message',{id: message.id }) }}">{{ message.title }}</a>
+												</h4>
+												{# <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+																																                    card's content...</p> #}
+											</div>
+											<div class="col-1 text-center">
+												{{ message.replies }}
+											</div>
+											<div class="col-1 text-center">
+												{{ message.viewed }}
+											</div>
+											<div class="col-3 text-center" style="padding-left: 5px;">
+												<i class="fa fa-user-o" style="margin-right: 5px;" aria-hidden="true"></i>
+												<a href="{{ path('forum_message_of_author',{id: message.user.id }) }}">{{ message.user.email }}</a>
+												<br>
+												<i class="fa fa-file-o" style="margin-right: 5px;" aria-hidden="true"></i>
+												{{ message.publishedAt ? message.publishedAt|date('d/m/Y') : '' }}
+												à
+												{{ message.publishedAt ? message.publishedAt|date('h:i') : ''}}
+											</div>
+										</div>
+									</ul>
+								</div>
+						{% else %}
+							Tous les messages ont déjà eu au moins une réponse.
+							
+						{% endfor %}
+			</div>
+		</div>
+	</div>
+	{# Stats widgets #}
+	{% include "layouts/partials/stats.html.twig" %}
+{% endblock %}
+
+

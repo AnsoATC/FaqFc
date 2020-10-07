@@ -13,7 +13,7 @@
 {{ form_start(form) }}
 {# Les champs du formulaire #}
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-12">
 		<div class="form-group">
 			<label for="itemTypeSelection">Titre</label>
 			{{ form_widget(form.title, {"attr":{"class": 'form-control'}}) }}
@@ -35,3 +35,4 @@
 <button type="btn" class="btn btn-primary pull-right">{{ button_label|default('Poster') }}</button>
 <div class="clearfix"></div>
 {{ form_end(form) }}
+
